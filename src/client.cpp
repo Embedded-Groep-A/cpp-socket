@@ -1,4 +1,4 @@
-#include "lib/socket/socket.h"
+#include "lib/Socket/Socket.h"
 #include <iostream>
 
 int main() {
