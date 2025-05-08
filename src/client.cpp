@@ -8,5 +8,9 @@ int main() {
 
     socket.connect(host, port);
 
+    while (true) {
+        // Keep the client running to maintain the connection
+    }
+
     return 0;
 }
