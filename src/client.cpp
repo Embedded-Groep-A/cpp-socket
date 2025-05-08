@@ -7,6 +7,7 @@ int main() {
     int port = 8181;
 
     socket.connect(host, port);
+    std::usleep(1000000);
 
     socket.disconnect();
 

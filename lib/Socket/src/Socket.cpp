@@ -29,9 +29,20 @@ void Socket::accept() {
     socklen_t addr_len = sizeof(client_addr);
     int client_fd = ::accept(socket_fd, (struct sockaddr*)&client_addr, &addr_len);
 
-   char ip[INET_ADDRSTRLEN];
+    char ip[INET_ADDRSTRLEN];
+    
     inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
-    std::cout << "Client connected " << ip << std::endl;
+    std::cout << "Client connecting from " << ip << std::endl;
+
+    char ID[8];
+    int bytes_received = recv(client_fd, ID, sizeof(ID), 0);
+    if (bytes_received > 0) {
+        ID[bytes_received] = '\0';
+        std::cout << "Received ID: " << ID << std::endl;
+        // Send ACK to client
+        send(client_fd, "ACK", 3, 0);
+    }
+
 }
 
 void Socket::close() {
@@ -40,7 +51,7 @@ void Socket::close() {
     std::cout << "Socket closed." << std::endl;
 }
 
-void Socket::connect(const std::string& host, int port) {
+void Socket::connect(const std::string& host, int port, const std::string& id) {
     sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(port);
@@ -48,7 +59,18 @@ void Socket::connect(const std::string& host, int port) {
 
     ::connect(socket_fd, (struct sockaddr*)&server_addr, sizeof(server_addr));
 
-    std::cout << "Connected to server at " << host << ":" << port << std::endl;
+    std::cout << "Connecting to server at " << host << ":" << port << std::endl;
+    // Send ID to server
+    send(socket_fd, id.c_str(), id.size(), 0);
+    // Wait for ACK
+    char buffer[1024];
+    int bytes_received = recv(socket_fd, buffer, sizeof(buffer), 0);
+    if (bytes_received > 0) {
+        buffer[bytes_received] = '\0';
+        if (strcmp(buffer, "ACK") == 0) {
+            std::cout << "Connected to server." << std::endl;
+        }
+    }
 }
 
 void Socket::disconnect() {

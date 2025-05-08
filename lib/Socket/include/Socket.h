@@ -25,7 +25,7 @@ public:
     void accept();
     void close();
     // Client
-    void connect(const std::string& host, int port);
+    void connect(const std::string& host, int port, const std::string& id);
     void disconnect();
 
 
