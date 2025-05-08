@@ -3,7 +3,7 @@
 
 int main() {
     Socket socket;
-    string host = "raspberrypi.local";
+    std::string host = "raspberrypi.local";
     int port = 8181;
 
     socket.connect(host, port);
