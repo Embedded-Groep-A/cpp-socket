@@ -8,5 +8,9 @@ int main() {
 
     socket.host(port, backlog);
 
+    while(true) {
+        
+    }
+
     return 0;
 }
