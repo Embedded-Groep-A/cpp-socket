@@ -22,6 +22,7 @@ public:
     Socket& operator=(Socket&&) = delete;
     // Server
     void host(int port, int backlog);
+    void accept();
     void close();
     // Client
     void connect(const std::string& host, int port);
@@ -34,6 +35,7 @@ public:
 
 private:
     int socket_fd;
+    int client_fd;
 };
 
 

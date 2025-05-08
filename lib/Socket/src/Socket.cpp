@@ -20,6 +20,18 @@ void Socket::host(int port, int backlog) {
 
     std::cout << "Server is listening on port " << port << std::endl;
 
+    accept();
+
+}
+
+void Socket::accept() {
+    sockaddr_in client_addr;
+    socklen_t addr_len = sizeof(client_addr);
+    int client_fd = ::accept(socket_fd, (struct sockaddr*)&client_addr, &addr_len);
+
+   char ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
+    std::cout << "Client connected " << ip << std::endl;
 }
 
 void Socket::close() {
