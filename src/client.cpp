@@ -9,11 +9,11 @@ int main() {
     socket.connect(host, port, "RPIB");
 
     while (true) {
-        std::string message = socket.pollServer();
-
         sleep(1);
         socket.sendToServer("test");
         std::cout << "Sent message to server: test" << std::endl;
+
+        std::string response = socket.pollServer();
         
     }
 
