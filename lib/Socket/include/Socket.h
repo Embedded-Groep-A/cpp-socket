@@ -9,6 +9,9 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <vector>
+#include <unordered_map>
+#include <utility> // for std::pair
 
 
 class Socket {

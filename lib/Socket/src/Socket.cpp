@@ -93,11 +93,11 @@ std::pair<int, std::string> Socket::poll() {
                 std:string clientID = clientIDs[fd];
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
                 return {clientID, message};
-        }
+            }
         ++it;
-    }
-
+        }
     return {};
+    }
 }
 
 void Socket::close() {
