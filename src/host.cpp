@@ -9,8 +9,20 @@ int main() {
     socket.host(port, backlog);
 
     while(true) {
-        
-    }
+        socket.accept();
+        auto [clientID, message] = socket.poll();
 
+        if (clientID == -1) {
+            continue;
+        }
+
+        if (message == "test") {
+            socket.sendToClient(clientID, "testACK");
+        }
+
+
+
+
+    }
     return 0;
 }

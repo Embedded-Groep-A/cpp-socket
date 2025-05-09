@@ -7,7 +7,18 @@ int main() {
     int port = 8181;
 
     socket.connect(host, port, "RPI");
-    usleep(1000000);
+
+    while (true) {
+        // KEEP CHECKING FOR MESSAGES
+        std::string message = socket.pollServer();
+        if (message.empty()) {
+            continue;
+        }
+        //////////////////////////////
+        socket.sendToServer("test");
+        
+    }
+
 
     socket.disconnect();
 

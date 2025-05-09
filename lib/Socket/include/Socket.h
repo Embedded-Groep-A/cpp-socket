@@ -22,11 +22,17 @@ public:
     Socket& operator=(Socket&&) = delete;
     // Server
     void host(int port, int backlog);
+    std::pair<int, std::string> poll();
     void accept();
     void close();
+
+    void sendToClient(const std::string& clientID, const std::string& message);
     // Client
     void connect(const std::string& host, int port, const std::string& id);
     void disconnect();
+
+    void sendToServer(const std::string& message);
+    std::string pollServer();
 
 
 
@@ -35,7 +41,10 @@ public:
 
 private:
     int socket_fd;
-    int client_fd;
+    std::vector<int> clients;
+    std::unordered_map<int, std::string> clientIDs; 
+
+    void disconnectClient(int client_fd);
 };
 
 
