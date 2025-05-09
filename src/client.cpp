@@ -13,11 +13,11 @@ int main() {
 
         sleep(1);
         socket.sendToServer("test");
-        cout << "Sent message to server: test" << std::endl;
+        std::cout << "Sent message to server: test" << std::endl;
         
     }
 
-    cout << "pp" << endl;
+    std::cout << "pp" << std::endl;
     socket.disconnect();
 
     return 0;
