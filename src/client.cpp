@@ -15,6 +15,7 @@ int main() {
             continue;
         }
         //////////////////////////////
+        sleep(1);
         socket.sendToServer("test");
         
     }
