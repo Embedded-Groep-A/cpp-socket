@@ -66,7 +66,6 @@ void Socket::accept() {
 
 
 std::pair<std::string, std::string> Socket::poll() {
-    std::cout << "Polling for messages..." << std::endl;
     fd_set read_fds;
     FD_ZERO(&read_fds);
     int max_fd = -1;
@@ -161,8 +160,8 @@ std::string Socket::pollServer() {
     char buffer[1024];
     ssize_t bytes = recv(socket_fd, buffer, sizeof(buffer), 0);
     if (bytes > 0) {
-        return std::string(buffer, bytes);
         std::cout << "Received message from server: " << buffer << std::endl;
+        return std::string(buffer, bytes);
     }
     return {};
 }

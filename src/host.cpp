@@ -15,13 +15,10 @@ int main() {
         if (clientID.empty() || message.empty()) {
             continue;
         }
-        
+
         if (message == "test") {
             socket.sendToClient(clientID, "testACK");
         }
-
-
-        sleep(1);
 
     }
     return 0;
