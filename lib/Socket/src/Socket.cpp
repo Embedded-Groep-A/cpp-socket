@@ -60,7 +60,7 @@ void Socket::accept() {
     }
 }
 
-std::pair<int, std::string> Socket::poll() {
+std::pair<std::string, std::string> Socket::poll() {
     fd_set read_fds;
     FD_ZERO(&read_fds);
     int max_fd = -1;
