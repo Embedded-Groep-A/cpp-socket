@@ -90,7 +90,7 @@ std::pair<std::string, std::string> Socket::poll() {
                 continue;
             } else {
                 std::string message(buffer, bytes);
-                std:string clientID = clientIDs[fd];
+                std::string clientID = clientIDs[fd];
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
                 return {clientID, message};
             }
