@@ -61,6 +61,7 @@ void Socket::accept() {
 }
 
 std::pair<std::string, std::string> Socket::poll() {
+    std::cout << "Polling for messages..." << std::endl;
     fd_set read_fds;
     FD_ZERO(&read_fds);
     int max_fd = -1;

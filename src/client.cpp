@@ -11,7 +11,6 @@ int main() {
     while (true) {
         sleep(1);
         socket.sendToServer("test");
-        std::cout << "Sent message to server: test" << std::endl;
 
         std::string response = socket.pollServer();
         
