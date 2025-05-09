@@ -12,10 +12,10 @@ int main() {
         socket.accept();
         auto [clientID, message] = socket.poll();
 
-        if (clientID == -1) {
+        if (clientID.empty() || message.empty()) {
             continue;
         }
-
+        
         if (message == "test") {
             socket.sendToClient(clientID, "testACK");
         }

@@ -33,7 +33,9 @@ void Socket::accept() {
     timeout.tv_sec = 0;
     timeout.tv_usec = 0;
 
-    if (select(socket_fd + 1, &read_fds, nullptr, nullptr, &timeout) > 0) {
+    if (select(socket_fd + 1, &read_fds, nullptr, nullptr, &timeout) > 0 &&
+        FD_ISSET(socket_fd, &read_fds)) {
+        
         sockaddr_in client_addr;
         socklen_t addr_len = sizeof(client_addr);
         int client_fd = ::accept(socket_fd, (struct sockaddr*)&client_addr, &addr_len);
@@ -43,22 +45,25 @@ void Socket::accept() {
             inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
             std::cout << "Client connecting from " << ip << std::endl;
 
-            char ID[9];
+            char ID[9] = {0};
             int bytes_received = recv(client_fd, ID, 8, 0);
             if (bytes_received > 0) {
                 ID[bytes_received] = '\0';
-                std::cout << "Received ID: " << ID << std::endl;
+                std::string idStr(ID);
+                std::cout << "Received ID: " << idStr << std::endl;
 
-                clientIDs[client_fd] = std::string(ID);
-
+                clientIDs[client_fd] = idStr;
                 send(client_fd, "ACK", 3, 0);
-            }
+                clients.push_back(client_fd);
 
-            clients.push_back(client_fd);
-            std::cout << "Client fd " << client_fd << " added to poll list." << std::endl;
+                std::cout << "Client fd " << client_fd << " added to poll list." << std::endl;
+            } else {
+                ::close(client_fd);
+            }
         }
     }
 }
+
 
 std::pair<std::string, std::string> Socket::poll() {
     std::cout << "Polling for messages..." << std::endl;
