@@ -9,12 +9,8 @@ int main() {
     socket.connect(host, port, "RPI");
 
     while (true) {
-        // KEEP CHECKING FOR MESSAGES
         std::string message = socket.pollServer();
-        if (message.empty()) {
-            continue;
-        }
-        //////////////////////////////
+
         sleep(1);
         socket.sendToServer("test");
         
