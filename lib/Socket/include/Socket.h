@@ -25,7 +25,7 @@ public:
     Socket& operator=(Socket&&) = delete;
     // Server
     void host(int port, int backlog);
-    std::pair<int, std::string> poll();
+    std::pair<std:string, std::string> poll();
     void accept();
     void close();
 
