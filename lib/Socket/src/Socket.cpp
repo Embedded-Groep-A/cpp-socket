@@ -96,8 +96,8 @@ std::pair<std::string, std::string> Socket::poll() {
             }
         ++it;
         }
-    return {};
     }
+    return {};
 }
 
 void Socket::close() {
