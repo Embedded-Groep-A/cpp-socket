@@ -171,6 +171,6 @@ void Socket::disconnectClient(int client_fd) {
         clients.erase(it);
         clientIDs.erase(client_fd);
         ::close(client_fd);
-        std::cout << "Client fd " << clientIDs[client_fd];<< " disconnected." << std::endl;
+        std::cout << "Client fd " << clientIDs[client_fd] << " disconnected." << std::endl;
     }
 }
