@@ -89,7 +89,6 @@ std::pair<std::string, std::string> Socket::poll() {
             char buffer[1024];
             ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
             if (bytes <= 0) {
-                std::cout << "Disconnected: fd " << fd << std::endl;
                 disconnectClient(fd);
                 it = clients.erase(it);
                 continue;
@@ -172,6 +171,6 @@ void Socket::disconnectClient(int client_fd) {
         clients.erase(it);
         clientIDs.erase(client_fd);
         ::close(client_fd);
-        std::cout << "Client fd " << client_fd << " disconnected." << std::endl;
+        std::cout << "Client fd " << clientIDs[client_fd];<< " disconnected." << std::endl;
     }
 }
