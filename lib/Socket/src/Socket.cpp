@@ -160,3 +160,13 @@ std::string Socket::pollServer() {
     }
     return {};
 }
+
+void Socket::disconnectClient(int client_fd) {
+    auto it = std::find(clients.begin(), clients.end(), client_fd);
+    if (it != clients.end()) {
+        clients.erase(it);
+        clientIDs.erase(client_fd);
+        ::close(client_fd);
+        std::cout << "Client fd " << client_fd << " disconnected." << std::endl;
+    }
+}
