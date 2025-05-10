@@ -25,10 +25,7 @@ void Socket::host(int port, int backlog) {
 }
 
 void Socket::accept() {
-    if (socket_fd < 0) {
-        std::cerr << "Socket is not valid. Cannot accept new connections." << std::endl;
-        return;
-    }
+    std::cout << "Accepting..." << std::endl;
 
     fd_set read_fds;
     FD_ZERO(&read_fds);
