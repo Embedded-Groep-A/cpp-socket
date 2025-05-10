@@ -70,20 +70,30 @@ std::pair<std::string, std::string> Socket::poll() {
     int max_fd = -1;
 
     for (int fd : clients) {
-        FD_SET(fd, &read_fds);
-        if (fd > max_fd) max_fd = fd;
+        if (fd >= 0) {
+            FD_SET(fd, &read_fds);
+            if (fd > max_fd) max_fd = fd;
+        }
+    }
+
+    if (max_fd < 0) {
+        return {};
     }
 
     timeval timeout{};
     timeout.tv_sec = 0;
     timeout.tv_usec = 0;
 
-    if (select(max_fd + 1, &read_fds, nullptr, nullptr, &timeout) <= 0) {
+    int ready = select(max_fd + 1, &read_fds, nullptr, nullptr, &timeout);
+    if (ready <= 0) {
         return {};
     }
 
+    std::pair<std::string, std::string> result;
+
     for (auto it = clients.begin(); it != clients.end(); ) {
         int fd = *it;
+
         if (FD_ISSET(fd, &read_fds)) {
             char buffer[1024];
             ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
@@ -95,14 +105,16 @@ std::pair<std::string, std::string> Socket::poll() {
                 std::string message(buffer, bytes);
                 std::string clientID = clientIDs[fd];
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
-                return {clientID, message};
+
+                result = {clientID, message};
             }
         }
         ++it;
     }
 
-    return {};
+    return result;
 }
+
 
 
 void Socket::close() {
