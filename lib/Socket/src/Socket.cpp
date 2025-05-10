@@ -39,27 +39,42 @@ void Socket::accept() {
         int client_fd = ::accept(socket_fd, (struct sockaddr*)&client_addr, &addr_len);
 
         if (client_fd >= 0) {
-            fcntl(client_fd, F_SETFL, O_NONBLOCK);
             char ip[INET_ADDRSTRLEN];
             inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
             std::cout << "Client connecting from " << ip << std::endl;
 
-            char ID[9] = {0};
-            int bytes_received = recv(client_fd, ID, 8, 0);
-            if (bytes_received > 0) {
-                ID[bytes_received] = '\0';
-                std::string idStr(ID);
-                std::cout << "Received ID: " << idStr << std::endl;
+            fd_set client_set;
+            FD_ZERO(&client_set);
+            FD_SET(client_fd, &client_set);
+            timeval id_timeout{};
+            id_timeout.tv_sec = 1;
+            id_timeout.tv_usec = 0;
 
-                clientIDs[client_fd] = idStr;
-                send(client_fd, "ACK", 3, 0);
-                clients.push_back(client_fd);
+            if (select(client_fd + 1, &client_set, nullptr, nullptr, &id_timeout) > 0 &&
+                FD_ISSET(client_fd, &client_set)) {
+
+                char ID[9] = {0};
+                int bytes_received = recv(client_fd, ID, 8, 0);
+                if (bytes_received > 0) {
+                    ID[bytes_received] = '\0';
+                    std::string idStr(ID);
+                    std::cout << "Received ID: " << idStr << std::endl;
+
+                    clientIDs[client_fd] = idStr;
+                    send(client_fd, "ACK", 3, 0);
+                    clients.push_back(client_fd);
+                } else {
+                    std::cerr << "Failed to receive client ID, closing connection." << std::endl;
+                    ::close(client_fd);
+                }
             } else {
+                std::cerr << "Timeout waiting for client ID, closing connection." << std::endl;
                 ::close(client_fd);
             }
         }
     }
 }
+
 
 
 std::pair<std::string, std::string> Socket::poll() {
