@@ -89,8 +89,8 @@ std::pair<std::string, std::string> Socket::poll() {
             ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
             if (bytes <= 0) {
                 disconnectClient(fd);
-                std::cout << "2" << std::endl;
                 it = clients.erase(it);
+                ++it;
                 continue;
             } else {
                 std::string message(buffer, bytes);
