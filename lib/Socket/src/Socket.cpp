@@ -96,8 +96,8 @@ std::pair<std::string, std::string> Socket::poll() {
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
                 return {clientID, message};
             }
-        ++it;
         }
+        ++it;
     }
     return {};
 }
