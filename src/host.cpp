@@ -10,7 +10,6 @@ int main() {
 
     while(true) {
         socket.accept();
-        std::cout << "Polling..." << std::endl;
         auto [clientID, message] = socket.poll();
 
         if (clientID.empty() || message.empty()) {

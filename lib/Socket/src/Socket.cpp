@@ -2,6 +2,7 @@
 
 Socket::Socket() {
     socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+    fcntl(socket_fd, F_SETFL, O_NONBLOCK);
 }
 
 Socket::~Socket() {
@@ -36,6 +37,8 @@ void Socket::accept() {
         sockaddr_in client_addr;
         socklen_t addr_len = sizeof(client_addr);
         int client_fd = ::accept(socket_fd, (struct sockaddr*)&client_addr, &addr_len);
+        fcntl(client_fd, F_SETFL, O_NONBLOCK);
+
 
         if (client_fd >= 0) {
             char ip[INET_ADDRSTRLEN];
