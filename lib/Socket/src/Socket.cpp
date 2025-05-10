@@ -90,7 +90,6 @@ std::pair<std::string, std::string> Socket::poll() {
             if (bytes <= 0) {
                 disconnectClient(fd);
                 it = clients.erase(it);
-                ++it;
                 continue;
             } else {
                 std::string message(buffer, bytes);
@@ -98,10 +97,9 @@ std::pair<std::string, std::string> Socket::poll() {
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
                 return {clientID, message};
             }
-        ++it;
         }
+        ++it;
     }
-    std::cout << "4" << std::endl;
     return {};
 }
 
