@@ -19,9 +19,6 @@ void Socket::host(int port, int backlog) {
     listen(socket_fd, backlog);
 
     std::cout << "Server is listening on port " << port << std::endl;
-
-    accept();
-
 }
 
 void Socket::accept() {
@@ -96,8 +93,8 @@ std::pair<std::string, std::string> Socket::poll() {
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
                 return {clientID, message};
             }
-        }
         ++it;
+        }
     }
     return {};
 }
@@ -174,5 +171,4 @@ void Socket::disconnectClient(int client_fd) {
     } else {
         std::cout << "disconnectClient: client not found" << std::endl;
     }
-    return;
 }
