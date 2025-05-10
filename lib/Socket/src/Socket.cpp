@@ -100,8 +100,10 @@ std::pair<std::string, std::string> Socket::poll() {
         }
         ++it;
     }
+
     return {};
 }
+
 
 void Socket::close() {
     ::close(socket_fd);
