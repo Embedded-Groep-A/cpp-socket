@@ -25,8 +25,6 @@ void Socket::host(int port, int backlog) {
 }
 
 void Socket::accept() {
-    std::cout << "Accepting..." << std::endl;
-
     fd_set read_fds;
     FD_ZERO(&read_fds);
     FD_SET(socket_fd, &read_fds);
@@ -173,5 +171,8 @@ void Socket::disconnectClient(int client_fd) {
         clientIDs.erase(client_fd);
         ::close(client_fd);
         std::cout << "Client " << clientID << " disconnected." << std::endl;
+    } else {
+        std::cout << "disconnectClient: client not found" << std::endl;
     }
+    return;
 }
