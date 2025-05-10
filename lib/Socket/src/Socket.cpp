@@ -64,7 +64,7 @@ void Socket::accept() {
 }
 
 
-std::pair<std::string, std::string> Socket::poll() {
+sstd::pair<std::string, std::string> Socket::poll() {
     fd_set read_fds;
     FD_ZERO(&read_fds);
     int max_fd = -1;
@@ -76,44 +76,39 @@ std::pair<std::string, std::string> Socket::poll() {
         }
     }
 
-    if (max_fd < 0) {
-        return {};
-    }
+    if (max_fd < 0) return {};
 
     timeval timeout{};
     timeout.tv_sec = 0;
     timeout.tv_usec = 0;
 
-    int ready = select(max_fd + 1, &read_fds, nullptr, nullptr, &timeout);
-    if (ready <= 0) {
-        return {};
-    }
+    int activity = select(max_fd + 1, &read_fds, nullptr, nullptr, &timeout);
+    if (activity <= 0) return {};
 
-    std::pair<std::string, std::string> result;
-
-    for (auto it = clients.begin(); it != clients.end(); ) {
-        int fd = *it;
-
+    // Use index-based iteration instead of iterator (safe against erasure)
+    for (size_t i = 0; i < clients.size(); ) {
+        int fd = clients[i];
         if (FD_ISSET(fd, &read_fds)) {
             char buffer[1024];
             ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
             if (bytes <= 0) {
                 disconnectClient(fd);
-                it = clients.erase(it);
+                // Erase and DO NOT increment i
+                clients.erase(clients.begin() + i);
                 continue;
             } else {
                 std::string message(buffer, bytes);
                 std::string clientID = clientIDs[fd];
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
-
-                result = {clientID, message};
+                return {clientID, message};
             }
         }
-        ++it;
+        ++i;
     }
 
-    return result;
+    return {};
 }
+
 
 
 
