@@ -2,7 +2,6 @@
 
 Socket::Socket() {
     socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-    fcntl(socket_fd, F_SETFL, O_NONBLOCK);
 }
 
 Socket::~Socket() {
@@ -41,7 +40,6 @@ void Socket::accept() {
         int client_fd = ::accept(socket_fd, (struct sockaddr*)&client_addr, &addr_len);
 
         if (client_fd >= 0) {
-            fcntl(client_fd, F_SETFL, O_NONBLOCK);
             char ip[INET_ADDRSTRLEN];
             inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
             std::cout << "Client connecting from " << ip << std::endl;
@@ -56,6 +54,8 @@ void Socket::accept() {
                 clientIDs[client_fd] = idStr;
                 send(client_fd, "ACK", 3, 0);
                 clients.push_back(client_fd);
+
+                std::cout << "Client fd " << client_fd << " added to poll list." << std::endl;
             } else {
                 ::close(client_fd);
             }
