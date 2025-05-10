@@ -25,6 +25,11 @@ void Socket::host(int port, int backlog) {
 }
 
 void Socket::accept() {
+    if (socket_fd < 0) {
+        std::cerr << "Socket is not valid. Cannot accept new connections." << std::endl;
+        return;
+    }
+
     fd_set read_fds;
     FD_ZERO(&read_fds);
     FD_SET(socket_fd, &read_fds);
@@ -55,8 +60,6 @@ void Socket::accept() {
                 clientIDs[client_fd] = idStr;
                 send(client_fd, "ACK", 3, 0);
                 clients.push_back(client_fd);
-
-                std::cout << "Client fd " << client_fd << " added to poll list." << std::endl;
             } else {
                 ::close(client_fd);
             }
