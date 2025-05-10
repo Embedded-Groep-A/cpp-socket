@@ -20,6 +20,8 @@ void Socket::host(int port, int backlog) {
     listen(socket_fd, backlog);
 
     std::cout << "Server is listening on port " << port << std::endl;
+
+    accept();
 }
 
 void Socket::accept() {
