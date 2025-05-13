@@ -91,27 +91,33 @@ std::pair<std::string, std::string> Socket::poll() {
 
     std::pair<std::string, std::string> result;
 
+    // Iterate through the list of connected clients
     for (auto it = clients.begin(); it != clients.end(); ) {
-        int fd = *it;
+        int fd = *it; // Get the file descriptor for the current client
 
+        // Check if the current client's file descriptor is ready for reading
         if (FD_ISSET(fd, &read_fds)) {
-            char buffer[1024];
-            ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
+            char buffer[1024]; // Buffer to store the incoming message
+            ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0); // Receive data from the client
+
+            // If the received bytes are less than or equal to 0, the client has disconnected or an error occurred
             if (bytes <= 0) {
-                std::string clientID = clientIDs[fd]; // Access clientID before disconnecting
-                disconnectClient(fd);
-                it = clients.erase(it);
+                std::string clientID = clientIDs[fd]; // Retrieve the client ID before disconnecting
+                it = clients.erase(it); // Remove the client from the list of connected clients
+                disconnectClient(fd); // Disconnect the client and clean up resources
                 std::cout << "Client " << clientID << " disconnected due to error or closure." << std::endl;
-                continue;
+                continue; // Skip the rest of the loop and move to the next client
             } else {
-                std::string message(buffer, bytes);
-                std::string clientID = clientIDs[fd];
+                // If data is received successfully, process the message
+                std::string message(buffer, bytes); // Convert the received data into a string
+                std::string clientID = clientIDs[fd]; // Retrieve the client ID associated with the file descriptor
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
-            
+
+                // Store the client ID and message in the result pair
                 result = {clientID, message};
             }
         }
-        ++it;
+        ++it; // Move to the next client in the list
     }
 
     return result;
