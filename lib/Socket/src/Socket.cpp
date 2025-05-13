@@ -91,35 +91,27 @@ std::pair<std::string, std::string> Socket::poll() {
 
     std::pair<std::string, std::string> result;
 
-    // Iterate through the list of connected clients
     for (auto it = clients.begin(); it != clients.end(); ) {
-        int fd = *it; // Get the file descriptor for the current client
+        int fd = *it;
 
-        // Check if the current client's file descriptor is ready for reading
         if (FD_ISSET(fd, &read_fds)) {
-            char buffer[1024]; // Buffer to store the incoming message
-            ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0); // Receive data from the client
+            char buffer[1024];
+            ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
 
-            // If the received bytes are less than or equal to 0, the client has disconnected or an error occurred
             if (bytes <= 0) {
-                std::string clientID = clientIDs[fd]; // Retrieve the client ID before disconnecting
-                it = clients.erase(it); // Remove the client from the list of connected clients
-                disconnectClient(fd); // Disconnect the client and clean up resources
-                std::cout << "Client " << clientID << " disconnected due to error or closure." << std::endl;
-                continue; // Skip the rest of the loop and move to the next client
+                std::string clientID = clientIDs[fd];
+                it = clients.erase(it);
+                disconnectClient(fd);
+                continue;
             } else {
-                // If data is received successfully, process the message
-                std::string message(buffer, bytes); // Convert the received data into a string
-                std::string clientID = clientIDs[fd]; // Retrieve the client ID associated with the file descriptor
+                std::string message(buffer, bytes);
+                std::string clientID = clientIDs[fd];
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
-
-                // Store the client ID and message in the result pair
                 result = {clientID, message};
             }
         }
-        ++it; // Move to the next client in the list
+        ++it;
     }
-
     return result;
 }
 
@@ -187,14 +179,7 @@ std::string Socket::pollServer() {
 }
 
 void Socket::disconnectClient(int client_fd) {
-    auto it = std::find(clients.begin(), clients.end(), client_fd);
-    if (it != clients.end()) {
-        std::string clientID = clientIDs[client_fd];
-        clients.erase(it);
-        clientIDs.erase(client_fd);
-        ::close(client_fd);
-        std::cout << "Client " << clientID << " disconnected." << std::endl;
-    } else {
-        std::cout << "disconnectClient: client not found" << std::endl;
-    }
+    clientIDs.erase(client_fd);
+    ::close(client_fd);
+    std::cout << "Client " << client_fd << " disconnected." << std::endl;
 }
