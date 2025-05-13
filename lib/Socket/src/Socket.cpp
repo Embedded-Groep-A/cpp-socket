@@ -55,7 +55,6 @@ void Socket::accept() {
                 send(client_fd, "ACK", 3, 0);
                 clients.push_back(client_fd);
 
-                std::cout << "Client fd " << client_fd << " added to poll list." << std::endl;
             } else {
                 ::close(client_fd);
             }
@@ -179,7 +178,8 @@ std::string Socket::pollServer() {
 }
 
 void Socket::disconnectClient(int client_fd) {
-    clientIDs.erase(client_fd);
     ::close(client_fd);
-    std::cout << "Client " << client_fd << " disconnected." << std::endl;
+    std::string clientID = clientIDs[client_fd];
+    clientIDs.erase(client_fd);
+    std::cout << "Client " << clientID << " disconnected." << std::endl;
 }
