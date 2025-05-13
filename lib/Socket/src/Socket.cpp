@@ -98,14 +98,16 @@ std::pair<std::string, std::string> Socket::poll() {
             char buffer[1024];
             ssize_t bytes = recv(fd, buffer, sizeof(buffer), 0);
             if (bytes <= 0) {
+                std::string clientID = clientIDs[fd]; // Access clientID before disconnecting
                 disconnectClient(fd);
                 it = clients.erase(it);
+                std::cout << "Client " << clientID << " disconnected due to error or closure." << std::endl;
                 continue;
             } else {
                 std::string message(buffer, bytes);
                 std::string clientID = clientIDs[fd];
                 std::cout << "Received message from client " << clientID << ": " << message << std::endl;
-
+            
                 result = {clientID, message};
             }
         }
