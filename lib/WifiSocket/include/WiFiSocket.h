@@ -7,9 +7,10 @@
 
 class WiFiSocket {
 public:
-    WiFiSocket(const char* ssid, const char* password);
+    WiFiSocket();
     ~WiFiSocket();
-    void connectSocket(const char* host, uint16_t port, cont char* id);
+    void connectWiFi(const char* ssid, const char* password);
+    void connectSocket(const char* host, uint16_t port, const char* id);
     void disconnectSocket();
     void sendToServer(MessageType type, const String& message);
     std::pair<MessageType, String> pollServer();
@@ -19,5 +20,5 @@ private:
     String serverIP;
     uint16_t serverPort;
     
-
+};
 #endif // WIFISOCKET_H

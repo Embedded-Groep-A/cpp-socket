@@ -7,11 +7,13 @@ const char *password = "DEFCAB1960";
 const char *host = "bramsvoorhoofd.local";
 int port = 8181;
 
-WiFiSocket wifiSocket(ssid, password);
+WiFiSocket wifiSocket;
 
 void setup() {
     Serial.begin(115200);
+    wifiSocket.connectWiFi(ssid, password);
     wifiSocket.connectSocket(host, port, "WEMOS");
+    delay(1000);
 }
 
 void loop() {

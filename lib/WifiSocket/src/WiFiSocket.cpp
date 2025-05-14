@@ -1,7 +1,13 @@
 #include "WiFiSocket.h"
 #include <string>
 
-WiFiSocket::WiFiSocket(const char* ssid, const char* password) {
+WiFiSocket::WiFiSocket() {
+
+}
+
+WiFiSocket::~WiFiSocket() {}
+
+void WiFiSocket::connectWiFi(const char* ssid, const char* password) {
     WiFi.begin(ssid, password);
     Serial.print("Connecting to WiFi.");
     while(WiFi.status() != WL_CONNECTED) {
@@ -11,8 +17,6 @@ WiFiSocket::WiFiSocket(const char* ssid, const char* password) {
     Serial.println();
     Serial.println(WiFi.localIP());
 }
-
-WiFiSocket::~WiFiSocket() {}
 
 void WiFiSocket::connectSocket(const char* host, uint16_t port, const char* id) {
     IPAddress ip;
@@ -30,6 +34,8 @@ void WiFiSocket::connectSocket(const char* host, uint16_t port, const char* id) 
         if (response == "ACK") {
             Serial.println("Connected to server.");
         }
+    } else {
+        Serial.println("Failed to connect to server.");
     }
 }
 
@@ -38,8 +44,8 @@ void WiFiSocket::disconnectSocket() {
     Serial.println("Disconnected from server.");
 }
 
-void sendToServer(MessageType type, const String& message) {
-    String msg = "[" + typeToString(type) + "] " + message;
+void WiFiSocket::sendToServer(MessageType type, const String& message) {
+    String msg = "[" + String(typeToString(type).c_str()) + "] " + message;
     client.println(msg);
     Serial.println("Sent message to server: " + msg);
 }
