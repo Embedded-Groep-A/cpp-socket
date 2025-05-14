@@ -10,13 +10,11 @@ int main() {
 
     while (true) {
         sleep(1);
-        socket.sendToServer("test");
+        socket.sendToServer(MessageType::SWITCH, "ON");
 
-        std::string response = socket.pollServer();
-        
+        auto [type, message] = socket.pollServer();
     }
 
-    std::cout << "pp" << std::endl;
     socket.disconnect();
 
     return 0;

@@ -63,7 +63,7 @@ void Socket::accept() {
 }
 
 
-std::pair<std::string, std::string> Socket::poll() {
+std::pair<std::string, MessageType, std::string> Socket::poll() {
     fd_set read_fds;
     FD_ZERO(&read_fds);
     int max_fd = -1;
@@ -88,10 +88,10 @@ std::pair<std::string, std::string> Socket::poll() {
         return {};
     }
 
-    std::pair<std::string, std::string> result;
+    std::pair<std::string, MessageType, std::string> result;
 
-    for (auto it = clients.begin(); it != clients.end(); ) {
-        int fd = *it;
+    for (auto client = clients.begin(); client != clients.end(); ) {
+        int fd = *client;
 
         if (FD_ISSET(fd, &read_fds)) {
             char buffer[1024];
@@ -99,17 +99,26 @@ std::pair<std::string, std::string> Socket::poll() {
 
             if (bytes <= 0) {
                 std::string clientID = clientIDs[fd];
-                it = clients.erase(it);
+                client = clients.erase(client);
                 disconnectClient(fd);
                 continue;
             } else {
                 std::string message(buffer, bytes);
                 std::string clientID = clientIDs[fd];
-                std::cout << "Received message from client " << clientID << ": " << message << std::endl;
-                result = {clientID, message};
+
+                size_t pos = message.find(' ');
+                if (pos != std::string::npos) {
+                    std::string typeStr = message.substr(1, pos - 1);
+                    MessageType type = stringToType(typeStr);
+                    message = message.substr(pos + 1);
+                    result = {clientID, type, message};
+                    std::cout << "Received message from client " << clientID << ": [" << typeStr << "] " << message << std::endl;
+                } else {
+                    std::cout << "Invalid message format from client " << clientID << std::endl;
+                }
             }
         }
-        ++it;
+        ++client;
     }
     return result;
 }
@@ -122,7 +131,9 @@ void Socket::close() {
     std::cout << "Socket closed." << std::endl;
 }
 
-void Socket::sendToClient(const std::string& clientID, const std::string& message) {
+void Socket::sendToClient(const std::string& clientID, MessageType type, std::string& message) {
+    std::string message = "[" + messageTypeToString(type); + "] " + message;
+
     for (const auto& pair : clientIDs) {
         if (pair.second == clientID) {
             int client_fd = pair.first;
@@ -162,17 +173,28 @@ void Socket::disconnect() {
     std::cout << "Disconnected from server." << std::endl;
 }
 
-void Socket::sendToServer(const std::string& message) {
+void Socket::sendToServer(MessageType type, std::string& message) {
+    message = "[" + messageTypeToString(type) + "] " + message;
     send(socket_fd, message.c_str(), message.size(), 0);
     std::cout << "Sent message to server: " << message << std::endl;
 }
 
-std::string Socket::pollServer() {
+std::pair<MessageType, std::string> Socket::pollServer() {
     char buffer[1024];
     ssize_t bytes = recv(socket_fd, buffer, sizeof(buffer), 0);
+
     if (bytes > 0) {
-        std::cout << "Received message from server: " << buffer << std::endl;
-        return std::string(buffer, bytes);
+        std::string message(buffer, bytes);
+        
+        size_t pos = message.find(' ');
+        if (pos != std::string::npos) {
+            std::string typeStr = message.substr(1, pos - 1);
+            MessageType type = stringToMessageType(typeStr);
+            std::string message = message.substr(space_pos + 1);
+            return {type, message};
+        } else {
+            std::cout << "Invalid message format from server: " << message << std::endl;
+        }
     }
     return {};
 }

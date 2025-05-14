@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <fcntl.h>
 
+#include "Message.h"
 
 
 class Socket {
@@ -28,17 +29,17 @@ public:
     Socket& operator=(Socket&&) = delete;
     // Server
     void host(int port, int backlog);
-    std::pair<std::string, std::string> poll();
+    std::pair<std::string, MessageType, std::string> poll();
     void accept();
     void close();
 
-    void sendToClient(const std::string& clientID, const std::string& message);
+    void sendToClient(const std::string& clientID, MessageType type, std::string& message);
     // Client
     void connect(const std::string& host, int port, const std::string& id);
     void disconnect();
 
-    void sendToServer(const std::string& message);
-    std::string pollServer();
+    void sendToServer(MessageType type, std::string& message);
+    std::pair<MessageType, std::string> pollServer();
 
 
 
