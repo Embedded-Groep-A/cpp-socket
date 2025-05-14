@@ -63,7 +63,7 @@ void Socket::accept() {
 }
 
 
-std::pair<std::string, MessageType, std::string> Socket::poll() {
+ClientMessage Socket::poll() {
     fd_set read_fds;
     FD_ZERO(&read_fds);
     int max_fd = -1;
@@ -88,7 +88,7 @@ std::pair<std::string, MessageType, std::string> Socket::poll() {
         return {};
     }
 
-    std::pair<std::string, MessageType, std::string> result;
+    ClientMessage result;
 
     for (auto client = clients.begin(); client != clients.end(); ) {
         int fd = *client;
@@ -108,20 +108,19 @@ std::pair<std::string, MessageType, std::string> Socket::poll() {
 
                 size_t pos = message.find(' ');
                 if (pos != std::string::npos) {
-                    std::string typeStr = message.substr(1, pos - 1);
+                    std::string typeStr = message.substr(1, pos - 2);
                     MessageType type = stringToType(typeStr);
                     message = message.substr(pos + 1);
                     result = {clientID, type, message};
-                    std::cout << "Received message from client " << clientID << ": [" << typeStr << "] " << message << std::endl;
-                } else {
-                    std::cout << "Invalid message format from client " << clientID << std::endl;
                 }
             }
         }
         ++client;
     }
+
     return result;
 }
+
 
 
 
@@ -132,7 +131,7 @@ void Socket::close() {
 }
 
 void Socket::sendToClient(const std::string& clientID, MessageType type, std::string& message) {
-    message = "[" + messageTypeToString(type); + "] " + message;
+    message = "[" + typeToString(type); + "] " + message;
 
     for (const auto& pair : clientIDs) {
         if (pair.second == clientID) {
@@ -190,7 +189,7 @@ std::pair<MessageType, std::string> Socket::pollServer() {
         if (pos != std::string::npos) {
             std::string typeStr = message.substr(1, pos - 1);
             MessageType type = stringToType(typeStr);
-            std::string message = message.substr(space_pos + 1);
+            std::string message = message.substr(pos + 1);
             return {type, message};
         } else {
             std::cout << "Invalid message format from server: " << message << std::endl;

@@ -17,6 +17,11 @@ enum class MessageType : uint8_t {
     TEXT = 9, // TEXT STUREN [TESTING]
 };
 
+struct ClientMessage {
+    std::string clientID;
+    MessageType type;
+    std::string message;
+};
 
 std::string typeToString(MessageType type);
 MessageType stringToType(const std::string& str);

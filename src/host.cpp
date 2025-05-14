@@ -10,17 +10,17 @@ int main() {
 
     while(true) {
         socket.accept();
-        auto [clientID, type, message] = socket.poll();
-        if (clientID.empty() || message.empty()) {
+        ClientMessage msg = socket.poll();
+        if (msg.clientID.empty() || msg.message.empty()) {
             continue;
         }
-        if (type == MessageType::STATE) {
-            if (message == "ON") {
+        if (msg.type == MessageType::STATE) {
+            if (msg.message == "ON") {
                 std::cout << "Switching ON" << std::endl;
-                socket.sendToClient(clientID, MessageType::TEXT, "bing chilling");
-            } else if (message == "OFF") {
+                socket.sendToClient(msg.clientID, MessageType::TEXT, "bing chilling");
+            } else if (msg.message == "OFF") {
                 std::cout << "Switching OFF" << std::endl;
-                socket.sendToClient(clientID, MessageType::TEXT, "kappa chungus");
+                socket.sendToClient(msg.clientID, MessageType::TEXT, "kappa chungus");
             } else {
                 std::cout << "Unknown command: " << message << std::endl;
             }
