@@ -112,6 +112,7 @@ ClientMessage Socket::poll() {
                     MessageType type = stringToType(typeStr);
                     message = message.substr(pos + 1);
                     result = {clientID, type, message};
+                    std::cout << "Received message from client " << clientID << ": [" << typeStr << "] " << message << std::endl;
                 }
             }
         }
@@ -190,6 +191,7 @@ std::pair<MessageType, std::string> Socket::pollServer() {
             std::string typeStr = message.substr(1, pos - 1);
             MessageType type = stringToType(typeStr);
             message = message.substr(pos + 1);
+            std::cout << "Received message from server: [" << typeStr << "] " << message << std::endl;
             return {type, message};
         } else {
             std::cout << "Invalid message format from server: " << message << std::endl;
