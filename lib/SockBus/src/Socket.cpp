@@ -132,7 +132,7 @@ void Socket::close() {
 }
 
 void Socket::sendToClient(const std::string& clientID, MessageType type, std::string& message) {
-    std::string message = "[" + messageTypeToString(type); + "] " + message;
+    message = "[" + messageTypeToString(type); + "] " + message;
 
     for (const auto& pair : clientIDs) {
         if (pair.second == clientID) {
@@ -174,7 +174,7 @@ void Socket::disconnect() {
 }
 
 void Socket::sendToServer(MessageType type, std::string& message) {
-    message = "[" + messageTypeToString(type) + "] " + message;
+    message = "[" + typeToString(type) + "] " + message;
     send(socket_fd, message.c_str(), message.size(), 0);
     std::cout << "Sent message to server: " << message << std::endl;
 }
@@ -189,7 +189,7 @@ std::pair<MessageType, std::string> Socket::pollServer() {
         size_t pos = message.find(' ');
         if (pos != std::string::npos) {
             std::string typeStr = message.substr(1, pos - 1);
-            MessageType type = stringToMessageType(typeStr);
+            MessageType type = stringToType(typeStr);
             std::string message = message.substr(space_pos + 1);
             return {type, message};
         } else {

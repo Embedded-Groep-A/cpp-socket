@@ -14,7 +14,7 @@ int main() {
         if (clientID.empty() || message.empty()) {
             continue;
         }
-        if (type == MessageType::SWITCH) {
+        if (type == MessageType::STATE) {
             if (message == "ON") {
                 std::cout << "Switching ON" << std::endl;
                 socket.sendToClient(clientID, MessageType::TEXT, "bing chilling");

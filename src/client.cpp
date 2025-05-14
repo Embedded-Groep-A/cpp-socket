@@ -10,7 +10,7 @@ int main() {
 
     while (true) {
         sleep(1);
-        socket.sendToServer(MessageType::SWITCH, "ON");
+        socket.sendToServer(MessageType::STATE, "ON");
 
         auto [type, message] = socket.pollServer();
     }
