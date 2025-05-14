@@ -45,12 +45,14 @@ void WiFiSocket::disconnectSocket() {
 }
 
 void WiFiSocket::sendToServer(MessageType type, const String& message) {
+    Serial.println("begin sendToServer");
     String msg = "[" + String(typeToString(type).c_str()) + "] " + message;
     client.println(msg);
     Serial.println("Sent message to server: " + msg);
 }
 
 std::pair<MessageType, String> WiFiSocket::pollServer() {
+    Serial.println("begin pollServer");
     if (client.available()) {
         String message = client.readStringUntil('\n');
         int pos = message.indexOf(' ');
