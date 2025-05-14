@@ -131,7 +131,7 @@ void Socket::close() {
 }
 
 void Socket::sendToClient(const std::string& clientID, MessageType type, const std::string& rawMsg) {
-    std::string message = "[" + typeToString(type); + "] " + rawMsg;
+    std::string message = "[" + typeToString(type) + "] " + rawMsg;
 
     for (const auto& pair : clientIDs) {
         if (pair.second == clientID) {
