@@ -188,7 +188,7 @@ std::pair<MessageType, std::string> Socket::pollServer() {
         
         size_t pos = message.find(' ');
         if (pos != std::string::npos) {
-            std::string typeStr = message.substr(1, pos - 1);
+            std::string typeStr = message.substr(1, pos);
             MessageType type = stringToType(typeStr);
             message = message.substr(pos + 1);
             std::cout << "Received message from server: [" << typeStr << "] " << message << std::endl;
