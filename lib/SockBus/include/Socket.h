@@ -33,12 +33,12 @@ public:
     void accept();
     void close();
 
-    void sendToClient(const std::string& clientID, MessageType type, std::string& message);
+    void sendToClient(const std::string& clientID, MessageType type, const std::string& message);
     // Client
     void connect(const std::string& host, int port, const std::string& id);
     void disconnect();
 
-    void sendToServer(MessageType type, std::string& message);
+    void sendToServer(MessageType type, const std::string& message);
     std::pair<MessageType, std::string> pollServer();
 
 

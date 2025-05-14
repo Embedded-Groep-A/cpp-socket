@@ -22,7 +22,7 @@ int main() {
                 std::cout << "Switching OFF" << std::endl;
                 socket.sendToClient(msg.clientID, MessageType::TEXT, "kappa chungus");
             } else {
-                std::cout << "Unknown command: " << message << std::endl;
+                std::cout << "Unknown command: " << msg.message << std::endl;
             }
         }
 
