@@ -37,14 +37,8 @@ public:
     // Client
     void connect(const std::string& host, int port, const std::string& id);
     void disconnect();
-
     void sendToServer(MessageType type, const std::string& message);
     std::pair<MessageType, std::string> pollServer();
-
-
-
-
-
 
 private:
     int socket_fd;
