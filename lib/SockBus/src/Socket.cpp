@@ -130,7 +130,7 @@ void Socket::close() {
     std::cout << "Socket closed." << std::endl;
 }
 
-void Socket::sendToClient(const std::string& clientID, MessageType type, std::string& rawMsg) {
+void Socket::sendToClient(const std::string& clientID, MessageType type, const std::string& rawMsg) {
     message = "[" + typeToString(type); + "] " + rawMsg;
 
     for (const auto& pair : clientIDs) {
@@ -172,7 +172,7 @@ void Socket::disconnect() {
     std::cout << "Disconnected from server." << std::endl;
 }
 
-void Socket::sendToServer(MessageType type, std::string& rawMsg) {
+void Socket::sendToServer(MessageType type, const std::string& rawMsg) {
     message = "[" + typeToString(type) + "] " + rawMsg;
     send(socket_fd, message.c_str(), message.size(), 0);
     std::cout << "Sent message to server: " << message << std::endl;
