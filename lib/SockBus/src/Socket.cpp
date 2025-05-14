@@ -189,7 +189,7 @@ std::pair<MessageType, std::string> Socket::pollServer() {
         if (pos != std::string::npos) {
             std::string typeStr = message.substr(1, pos - 1);
             MessageType type = stringToType(typeStr);
-            std::string message = message.substr(pos + 1);
+            message = message.substr(pos + 1);
             return {type, message};
         } else {
             std::cout << "Invalid message format from server: " << message << std::endl;
