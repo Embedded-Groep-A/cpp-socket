@@ -41,7 +41,8 @@ int main() {
             for (const auto& eigenaar : eigenaars) {
             if (eigenaar.uid == uid) {
                 std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
-                piBus.send(MessageType::ACCEPT, eigenaar.eigenaarNaam);
+                const char* eigenaarNaamWithCR = (std::string(eigenaar.eigenaarNaam) + "\r").c_str();
+                piBus.send(MessageType::ACCEPT, eigenaarNaamWithCR);
                 piBus.send(MessageType::OPEN, "");
                 found = true;
                 break;
