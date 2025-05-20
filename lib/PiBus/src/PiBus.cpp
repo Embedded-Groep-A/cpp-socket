@@ -53,7 +53,7 @@ void PiBus::openSerial(const char* port, int baud) {
 void PiBus::send(MessageType type, const char* data) {
     std::string message;
     if (type == MessageType::ACCEPT) {
-        message = std::string("%") + data + "\r";
+        message = "%" + std::string(data) + "\r";
 
     } else if (type == MessageType::REJECT) {
         message = std::string("#") + data + "\r";
