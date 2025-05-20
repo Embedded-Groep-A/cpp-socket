@@ -13,12 +13,6 @@ int main() {
     piBus.openSerial("/dev/ttyS0", 115200);
 
     while (true) {
-        auto [type, data] = piBus.poll();
-        if (type == MessageType::UNKNOWN) {
-            continue;
-        }
-
-
         piBus.send(MessageType::TEXT, "TEST");
     }
 
