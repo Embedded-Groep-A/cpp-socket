@@ -25,9 +25,8 @@ int main() {
     piBus.openSerial("/dev/ttyS0", 9600);
 
     while (true) {
-
-        std::string data = piBus.rawRead();
-        std::cout << "Received from PiBus: " << data << std::endl;
+        auto [type, data] = piBus.poll();
+        
     }
 
         
