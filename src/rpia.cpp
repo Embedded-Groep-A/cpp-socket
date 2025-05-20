@@ -27,7 +27,9 @@ int main() {
     while (true) {
 
         std::string data = piBus.rawRead();
-        std::cout << "Received from PiBus: " << data << std::endl;
+        if (!data.empty()) {
+            std::cout << "Received from PiBus: " << data << std::endl;
+        }
     }
 
         
