@@ -1,5 +1,6 @@
 #include "Socket.h"
 #include "PiBus.h"
+#include "Message.h"
 #include <iostream>
 
 int main() {
@@ -16,6 +17,11 @@ int main() {
         if (type == MessageType::UNKNOWN) {
             continue;
         }
+
+
+        piBus.send(MessageType::TEXT, "TEST");
+    }
+
         
 
 
