@@ -5,13 +5,13 @@
 #include <unistd.h>
 
 typedef struct {
-    uint8_t uid[4];
+    std::string uid;
     const char* eigenaarNaam;
 } Eigenaar;
 
 Eigenaar eigenaars[] = {
-    {{0x77, 0xda, 0xac, 0x02}, "Cas"},
-    {{0x1e, 0x4c, 0xcf, 0x05}, "Thijs"},
+    {"77 da ac 02", "Cas"},
+    {"1e 4c cf 05", "Thijs"},
    // {{0x64, 0x81, 0xE6, 0x03}, "Ahmed"}
 };
 
@@ -35,11 +35,11 @@ int main() {
             socket.sendToServer(MessageType::RGB, rgbString);
         }
         if (type == MessageType::UID) {
-            std::cout << data << std::endl;
+            std::string uid(data.begin(), data.end());
+            std::cout << "Received UID: " << uid << std::endl;
             bool found = false;
             for (const auto& eigenaar : eigenaars) {
-            if (std::equal(std::begin(eigenaar.uid), std::end(eigenaar.uid), data.begin(), 
-                [](uint8_t a, char b) { return std::tolower(a) == std::tolower(b); })) {
+            if (eigenaar.uid == uid) {
                 std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
                 piBus.send(MessageType::ACCEPT, eigenaar.eigenaarNaam);
                 piBus.send(MessageType::OPEN, "");
