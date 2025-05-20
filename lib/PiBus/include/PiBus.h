@@ -14,6 +14,7 @@ public:
     void openSerial(const char* port, int baud);
     void send(MessageType type, const char* data);
     std::pair<MessageType, std::string> poll();
+    std::string rawRead();
 private:
     int fd;
 };

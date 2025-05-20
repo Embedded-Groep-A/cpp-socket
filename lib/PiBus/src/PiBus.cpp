@@ -54,3 +54,13 @@ std::pair<MessageType, std::string> PiBus::poll() {
     }
     return {MessageType::UNKNOWN, ""};
 }
+
+std::string PiBus::rawRead() {
+    char buffer[1024] = {0}; // Zero-initialize the buffer
+    ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+    if (bytes > 0) {
+        buffer[bytes] = '\0';
+        return std::string(buffer);
+    }
+    return "";
+}
