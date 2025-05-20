@@ -37,7 +37,7 @@ void PiBus::send(MessageType type, const char* data) {
 }
 
 std::pair<MessageType, std::string> PiBus::poll() {
-    char buffer[1024];
+    char buffer[1024] = {0}; // Zero-initialize the buffer
     ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
     std::cout << "received: " << buffer << std::endl;
     if (bytes > 0) {
