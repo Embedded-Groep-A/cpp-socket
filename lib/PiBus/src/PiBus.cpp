@@ -65,36 +65,51 @@ void PiBus::send(MessageType type, const char* data) {
 }
 
 std::pair<MessageType, std::string> PiBus::poll() {
+    std::string message;
     char buffer[1024] = {0};
-    ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
-    if (bytes > 0) {
-        buffer[bytes] = '\0';  // null-terminate
 
-        std::string message(buffer);
+    while (true) {
+        ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+        if (bytes > 0) {
+            buffer[bytes] = '\0';  // null-terminate
+            message += buffer;
 
-        // Print whole message in one line
-        std::cout << "received: " << message << std::endl;
-
-        // Parse [TYPE]
-        size_t start = message.find('[');
-        size_t end = message.find(']');
-        if (start != std::string::npos && end != std::string::npos && end > start + 1) {
-            std::string typeStr = message.substr(start + 1, end - start - 1);
-            MessageType type = stringToType(typeStr);
-
-            std::string data;
-            if (end + 1 < message.size()) {
-                data = message.substr(end + 1);
-                // Trim leading space
-                if (!data.empty() && data[0] == ' ') {
-                    data = data.substr(1);
-                }
+            // Check if the message contains a complete transmission (ends with '\r')
+            if (!message.empty() && message.back() == '\r') {
+                break;
             }
-
-            std::cout << "Parsed message type: " << typeStr << ", data: " << data << std::endl;
-
-            return {type, data};
+        } else if (bytes == 0) {
+            // End of file or no data
+            break;
+        } else {
+            // Error occurred
+            perror("read");
+            return {MessageType::UNKNOWN, ""};
         }
+    }
+
+    // Print whole message in one line
+    std::cout << "received: " << message << std::endl;
+
+    // Parse [TYPE]
+    size_t start = message.find('[');
+    size_t end = message.find(']');
+    if (start != std::string::npos && end != std::string::npos && end > start + 1) {
+        std::string typeStr = message.substr(start + 1, end - start - 1);
+        MessageType type = stringToType(typeStr);
+
+        std::string data;
+        if (end + 1 < message.size()) {
+            data = message.substr(end + 1);
+            // Trim leading space
+            if (!data.empty() && data[0] == ' ') {
+                data = data.substr(1);
+            }
+        }
+
+        std::cout << "Parsed message type: " << typeStr << ", data: " << data << std::endl;
+
+        return {type, data};
     }
 
     return {MessageType::UNKNOWN, ""};
