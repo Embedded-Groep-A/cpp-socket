@@ -31,6 +31,8 @@ int main() {
             int g = static_cast<int>(data[1]);
             int b = static_cast<int>(data[2]);
             std::cout << "RGB values: R=" << r << ", G=" << g << ", B=" << b << std::endl;
+            std::string rgbString = std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b);
+            socket.sendToServer(MessageType::RGB, rgbString);
         }
 
     }

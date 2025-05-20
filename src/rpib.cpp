@@ -14,16 +14,9 @@ int main() {
         if (msg.clientID.empty() || msg.message.empty()) {
             continue;
         }
-        if (msg.type == MessageType::STATE) {
-            if (msg.message == "ON") {
-                std::cout << "Switching ON" << std::endl;
-                socket.sendToClient(msg.clientID, MessageType::TEXT, "bing chilling");
-            } else if (msg.message == "OFF") {
-                std::cout << "Switching OFF" << std::endl;
-                socket.sendToClient(msg.clientID, MessageType::TEXT, "kappa chungus");
-            } else {
-                std::cout << "Unknown command: " << msg.message << std::endl;
-            }
+        if (msg.type == MessageType::RGB) {
+            socket.sendToClient("WEMOS", MessageType::RGB, msg.message);
+
         }
 
     }
