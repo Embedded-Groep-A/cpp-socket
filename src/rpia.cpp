@@ -35,19 +35,21 @@ int main() {
             socket.sendToServer(MessageType::RGB, rgbString);
         }
         if (type == MessageType::UID) {
+            std::cout << data << std::endl;
             bool found = false;
             for (const auto& eigenaar : eigenaars) {
-                if (std::equal(std::begin(eigenaar.uid), std::end(eigenaar.uid), data.begin())) {
-                    std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
-                    piBus.send(MessageType::ACCEPT, eigenaar.eigenaarNaam);
-                    piBus.send(MessageType::OPEN, "");
-                    found = true;
-                    break;
-                }
+            if (std::equal(std::begin(eigenaar.uid), std::end(eigenaar.uid), data.begin(), 
+                [](uint8_t a, char b) { return std::tolower(a) == std::tolower(b); })) {
+                std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
+                piBus.send(MessageType::ACCEPT, eigenaar.eigenaarNaam);
+                piBus.send(MessageType::OPEN, "");
+                found = true;
+                break;
+            }
             }
             if (!found) {
-                std::cout << "UID not recognized" << std::endl;
-                piBus.send(MessageType::REJECT, "");
+            std::cout << "UID not recognized" << std::endl;
+            piBus.send(MessageType::REJECT, "");
             }
         } else if (type == MessageType::BEL) {
             std::cout << "tringelingeling" << std::endl;
