@@ -31,6 +31,8 @@ int main() {
             continue;
         }
         std::cout << "Received from bus: " << typeToString(type) << data << std::endl;
+
+        usleep(100000);
     }
 
         
