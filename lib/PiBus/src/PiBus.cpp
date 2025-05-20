@@ -1,4 +1,5 @@
 #include <PiBus.h>
+#include <iostream>
 
 PiBus::PiBus() {}
 
@@ -38,6 +39,7 @@ std::pair<MessageType, std::string> PiBus::poll() {
             std::string typeStr = message.substr(1, pos - 2);
             MessageType type = stringToType(typeStr);
             std::string data = message.substr(pos + 2);
+            std::cout << "Received from bus: " << message << std::endl;
             return {type, data};
         }
     }
