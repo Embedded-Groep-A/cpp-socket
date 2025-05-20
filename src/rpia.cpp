@@ -27,12 +27,9 @@ int main() {
     while (true) {
         auto [type, data] = piBus.poll();
         if (type == MessageType::UNKNOWN) {
-            std::cerr << "niks" << std::endl;
             continue;
         }
         std::cout << "Received from bus: " << typeToString(type) << data << std::endl;
-
-        usleep(100000);
     }
 
         
