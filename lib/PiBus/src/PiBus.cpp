@@ -23,7 +23,12 @@ void PiBus::openSerial(const char* port, int baud) {
 }
 
 void PiBus::send(MessageType type, const char* data) {
-    std::string message = "[" + typeToString(type) + "] " + data;
+    std::string message;
+    if (type == MessageType::ACCEPT) {
+        message = std::string("!") + data + "\r";
+    } else {
+        message = "[" + typeToString(type) + "] " + data;;
+    }
     write(fd, message.c_str(), message.size());
     std::cout << "Sent to bus: " << message << std::endl;
 }

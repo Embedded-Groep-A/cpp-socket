@@ -2,6 +2,7 @@
 #include "PiBus.h"
 #include "Message.h"
 #include <iostream>
+#include <unistd.h> 
 
 int main() {
     Socket socket;
@@ -13,7 +14,8 @@ int main() {
     piBus.openSerial("/dev/ttyS0", 115200);
 
     while (true) {
-        piBus.send(MessageType::TEXT, "TEST");
+        piBus.send(MessageType::ACCEPT, "AHMED");
+        sleep(1);
     }
 
         
