@@ -67,21 +67,33 @@ void PiBus::send(MessageType type, const char* data) {
 std::pair<MessageType, std::string> PiBus::poll() {
     char buffer[1024] = {0}; // Zero-initialize the buffer
     ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
-    std::cout << "received: " << buffer << std::endl;
     if (bytes > 0) {
         buffer[bytes] = '\0';
         std::string message(buffer);
-        size_t pos = message.find(']');
-        if (pos != std::string::npos) {
-            std::string typeStr = message.substr(1, pos - 2);
+        std::cout << "received: " << message << std::endl;
+
+        // Basic format: [TYPE] content
+        size_t start = message.find('[');
+        size_t end = message.find(']');
+        if (start != std::string::npos && end != std::string::npos && end > start + 1) {
+            std::string typeStr = message.substr(start + 1, end - start - 1);
             MessageType type = stringToType(typeStr);
-            std::string data = message.substr(pos + 2);
-            std::cout << "Received from bus: " << message << std::endl;
+
+            std::string data;
+            if (end + 1 < message.size()) {
+                data = message.substr(end + 1);
+                // optionally trim leading space
+                if (!data.empty() && data[0] == ' ') data = data.substr(1);
+            }
+
+            std::cout << "Parsed message type: " << typeStr << ", data: " << data << std::endl;
             return {type, data};
         }
     }
+
     return {MessageType::UNKNOWN, ""};
 }
+
 
 std::string PiBus::rawRead() {
     char buffer[1024] = {0}; // Zero-initialize the buffer
