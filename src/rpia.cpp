@@ -54,6 +54,12 @@ int main() {
             }
         } else if (type == MessageType::BEL) {
             std::cout << "tringelingeling" << std::endl;
+        } else if (type == MessageType::STATE) {
+            if (data == "SCHEMERLAMP") {
+                socket.sendToServer(MessageType::STATE, "SCHEMERLAMP");
+            } else if (data == "STOEL") {
+                socket.sendToServer(MessageType::STATE, "STOEL");
+            }
         }
 
     }
