@@ -33,7 +33,7 @@ void PiBus::send(MessageType type, const char* data) {
         message = "[" + typeToString(type) + "] " + data;;
     }
     write(fd, message.c_str(), message.size());
-    std::cout << "Sent to bus: " << typeToString(type) << message << std::endl;
+    std::cout << "Sent to bus: " << message << std::endl;
 }
 
 std::pair<MessageType, std::string> PiBus::poll() {
