@@ -26,7 +26,13 @@ int main() {
 
     while (true) {
         auto [type, data] = piBus.poll();
-        
+        if (type == MessageType::RGB) {
+            int r = static_cast<int>(data[0]);
+            int g = static_cast<int>(data[1]);
+            int b = static_cast<int>(data[2]);
+            std::cout << "RGB values: R=" << r << ", G=" << g << ", B=" << b << std::endl;
+        }
+
     }
 
         

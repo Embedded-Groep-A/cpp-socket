@@ -78,9 +78,6 @@ std::pair<MessageType, std::string> PiBus::poll() {
             std::string message = buffer.substr(0, endPos); // Extract the message
             buffer.erase(0, endPos + 1);                   // Remove the processed message
 
-            // Print whole message in one line
-            std::cout << "received: " << message << std::endl;
-
             // Parse [TYPE]
             size_t start = message.find('[');
             size_t end = message.find(']');
