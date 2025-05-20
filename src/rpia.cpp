@@ -15,7 +15,7 @@ int main() {
 
     while (true) {
         piBus.send(MessageType::ACCEPT, "AHMED");
-        sleep(1);
+        sleep(6);
     }
 
         
