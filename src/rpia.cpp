@@ -5,7 +5,7 @@
 
 int main() {
     Socket socket;
-    std::string host = "192.168.1.203";
+    std::string host = "145.52.127.241";
     int port = 8181;
     socket.connect(host, port, "RPIA");
 
