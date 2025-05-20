@@ -22,7 +22,7 @@ int main() {
     socket.connect(host, port, "RPIA");
 
     PiBus piBus;
-    piBus.openSerial("/dev/ttyS0", 115200);
+    piBus.openSerial("/dev/ttyS0", 9600);
 
     while (true) {
         auto [type, data] = piBus.poll();
