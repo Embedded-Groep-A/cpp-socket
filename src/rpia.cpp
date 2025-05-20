@@ -25,8 +25,6 @@ int main() {
     piBus.openSerial("/dev/ttyS0", 9600);
 
     while (true) {
-        piBus.send(MessageType::ACCEPT, "CASSIE");
-        sleep(6);
 
         auto [type, data] = piBus.poll();
         if (type == MessageType::UNKNOWN) {
