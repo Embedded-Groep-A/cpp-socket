@@ -26,11 +26,14 @@ void PiBus::send(MessageType type, const char* data) {
     std::string message;
     if (type == MessageType::ACCEPT) {
         message = std::string("!") + data + "\r";
+
+    } else if (type == MessageType::REJECT) {
+        message = std::string("#") + data + "\r";
     } else {
         message = "[" + typeToString(type) + "] " + data;;
     }
     write(fd, message.c_str(), message.size());
-    std::cout << "Sent to bus: " << message << std::endl;
+    std::cout << "Sent to bus: " << typeToString(type) << message << std::endl;
 }
 
 std::pair<MessageType, std::string> PiBus::poll() {
