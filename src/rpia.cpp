@@ -43,7 +43,7 @@ int main() {
                 std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
                 const char* eigenaarNaamWithCR = (std::string(eigenaar.eigenaarNaam) + "\r").c_str();
                 piBus.send(MessageType::ACCEPT, eigenaarNaamWithCR);
-                piBus.send(MessageType::OPEN, "");
+                //piBus.send(MessageType::OPEN, "");
                 found = true;
                 break;
             }
