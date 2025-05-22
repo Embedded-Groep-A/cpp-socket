@@ -21,8 +21,9 @@ int main() {
         } else if (msg.type == MessageType::STATE) {
             if (msg.message == "BEWEGING") {
                 socket.sendToClient("WEMOS", MessageType::STATE, "ON");
-        }
+            }
 
+        }
     }
     return 0;
-}
+}   
