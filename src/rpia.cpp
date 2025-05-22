@@ -62,9 +62,6 @@ int main() {
             }
         }
 
-        piBus.send(MessageType::REJECT, "OSCAR\r");
-        sleep(6);
-
     }
 
         
