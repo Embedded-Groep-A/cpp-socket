@@ -14,9 +14,13 @@ int main() {
         if (msg.clientID.empty() || msg.message.empty()) {
             continue;
         }
+        // FORWARD RGB VALUE FROM RPIA TO WEMOS
         if (msg.type == MessageType::RGB) {
             socket.sendToClient("WEMOS", MessageType::RGB, msg.message);
-
+        // SEND ON TO RGB WHEN RECEIVNG MOVEMENT  
+        } else if (msg.type == MessageType::STATE) {
+            if (msg.message == "BEWEGING") {
+                socket.sendToClient("WEMOS", MessageType::STATE, "ON");
         }
 
     }
