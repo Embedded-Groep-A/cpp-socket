@@ -21,6 +21,8 @@ int main() {
         } else if (msg.type == MessageType::STATE) {
             if (msg.message == "BEWEGING") {
                 socket.sendToClient("WEMOSRGB", MessageType::STATE, "ON");
+            } else if (msg.message == "STOEL") {
+                socket.sendToClient("WEMOSR", MessageType::STATE, "STOEL");
             }
 
         }
