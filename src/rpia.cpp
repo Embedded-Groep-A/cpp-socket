@@ -27,6 +27,7 @@ int main() {
     while (true) {
 
         piBus.send(MessageType::BEL, "");
+        sleep(1);
         auto [type, data] = piBus.poll();
         if (type == MessageType::RGB) {
             int r = static_cast<int>(data[0]);
