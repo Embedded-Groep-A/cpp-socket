@@ -23,11 +23,10 @@ int main() {
 
     PiBus piBus;
     piBus.openSerial("/dev/ttyS0", 9600);
+    piBus.send(MessageType::BEL, "");
 
     while (true) {
 
-        piBus.send(MessageType::BEL, "");
-        sleep(1);
         auto [type, data] = piBus.poll();
         if (type == MessageType::RGB) {
             int r = static_cast<int>(data[0]);
