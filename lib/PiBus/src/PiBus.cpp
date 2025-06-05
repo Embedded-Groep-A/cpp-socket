@@ -57,6 +57,8 @@ void PiBus::send(MessageType type, const char* data) {
 
     } else if (type == MessageType::REJECT) {
         message = std::string("#") + data + "\r";
+    } else if (type == MessageType::BEL) {
+        message = std::string("@") + data + "\r";
     } else {
         message = "[" + typeToString(type) + "] " + data;;
     }
