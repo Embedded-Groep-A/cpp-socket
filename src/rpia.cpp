@@ -17,7 +17,7 @@ Eigenaar eigenaars[] = {
 
 int main() {
     Socket socket;
-    std::string host = "145.52.127.241";
+    std::string host = "145.52.127.103";
     int port = 8181;
     socket.connect(host, port, "RPIA");
 
