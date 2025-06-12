@@ -36,27 +36,22 @@ int main() {
                 std::cout << "Received STOEL command" << std::endl;
                 socket.sendToClient("WEMOSR", MessageType::STATE, "STOEL");
             }
+        } else if (msg.type == MessageType::UID) {
+            std::string uid = msg.message;
+            std::cout << "Received UID: " << uid << std::endl;
+
+            // Check if the UID matches any owner
+            for (const auto& eigenaar : eigenaars) {
+                if (uid == eigenaar.uid) {
+                    std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
+                    socket.sendToClient("RPIA", MessageType::ACCEPT, eigenaar.eigenaarNaam);
+                    break;
+                }
+            }
+        } else {
+            std::cout << "Unknown message type: " << static_cast<int>(msg.type) << std::endl;
         }
     }
-    //     } else if (msg.type == MessageType::UID) {
-    //         std::string uid(msg.message);
-    //         std::cout << "Received UID: " << uid << std::endl;
-    //         bool found = false;
-    //         for (const auto& eigenaar : eigenaars) {
-    //             if (eigenaar.uid == uid) {
-    //                 std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
-    //                 const char* eigenaarNaamWithCR = (std::string(eigenaar.eigenaarNaam) + "\r").c_str();
-    //                 socket.sendToClient(msg.clientID, MessageType::ACCEPT, eigenaarNaamWithCR);
-    //                 socket.sendToClient(msg.clientID, MessageType::OPEN, "");
-    //                 found = true;
-    //                 break;
-    //             }
-    //         }
-    //         if (!found) {
-    //             std::cout << "UID not recognized" << std::endl;
-    //             socket.sendToClient(msg.clientID, MessageType::REJECT, "");
-    //         }
-    //     }
-    // }
+
     return 0;
 }   
