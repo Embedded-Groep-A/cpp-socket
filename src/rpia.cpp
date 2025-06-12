@@ -23,7 +23,6 @@ int main() {
 
     PiBus piBus;
     piBus.openSerial("/dev/ttyS0", 9600);
-    piBus.send(MessageType::BEL, "");
 
     while (true) {
 
