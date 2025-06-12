@@ -22,6 +22,7 @@ int main() {
             if (msg.message == "BEWEGING") {
                 socket.sendToClient("WEMOSRGB", MessageType::STATE, "ON");
             } else if (msg.message == "STOEL") {
+                std::cout << "Received STOEL command" << std::endl;
                 socket.sendToClient("WEMOSR", MessageType::STATE, "STOEL");
             }
 
