@@ -37,6 +37,7 @@ int main() {
                 socket.sendToClient("WEMOSR", MessageType::STATE, "STOEL");
             }
         }
+    }
     //     } else if (msg.type == MessageType::UID) {
     //         std::string uid(msg.message);
     //         std::cout << "Received UID: " << uid << std::endl;
