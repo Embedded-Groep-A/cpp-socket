@@ -62,7 +62,7 @@ int main() {
             } else if (data == "STOEL") {
                 socket.sendToServer(MessageType::STATE, "STOEL");
             }
-        }
+        } 
 
     }
 
