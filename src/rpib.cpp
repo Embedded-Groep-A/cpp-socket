@@ -48,8 +48,9 @@ int main() {
                     socket.sendToClient("RPIA", MessageType::OPEN, "");
                     break;
                 }
+                socket.sendToClient("RPIA", MessageType::REJECT, "");
+
             }
-            socket.sendToClient("RPIA", MessageType::REJECT, "");
 
         } else {
             std::cout << "Unknown message type: " << static_cast<int>(msg.type) << std::endl;
