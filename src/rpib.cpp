@@ -7,9 +7,8 @@ typedef struct {
 } Eigenaar;
 
 Eigenaar eigenaars[] = {
-    {"77 DA AC 02", "Cas"},
-    {"1E 4C CF 05", "Thijs"},
-   // {{0x64, 0x81, 0xE6, 0x03}, "Ahmed"}
+    {"77 DA AC 02", "CAS"},
+    {"1E 4C CF 05", "THIJS"},
 };
 
 int main() {
