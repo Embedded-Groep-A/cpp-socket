@@ -53,7 +53,7 @@ int main() {
             std::cout << "UID not recognized" << std::endl;
             piBus.send(MessageType::REJECT, "");
             }
-        } else {
+        } else if (type != MessageType::UNKNOWN){
             piBus.send(type, data.c_str());
         } 
 
