@@ -44,7 +44,7 @@ int main() {
                 std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
                 const char* eigenaarNaamWithCR = (std::string(eigenaar.eigenaarNaam) + "\r").c_str();
                 piBus.send(MessageType::ACCEPT, eigenaarNaamWithCR);
-                //piBus.send(MessageType::OPEN, "");
+                piBus.send(MessageType::OPEN, "");
                 found = true;
                 break;
             }
@@ -53,14 +53,8 @@ int main() {
             std::cout << "UID not recognized" << std::endl;
             piBus.send(MessageType::REJECT, "");
             }
-        } else if (type == MessageType::BEL) {
-            std::cout << "tringelingeling" << std::endl;
-        } else if (type == MessageType::STATE) {
-            if (data == "SCHEMERLAMP") {
-                socket.sendToServer(MessageType::STATE, "SCHEMERLAMP");
-            } else if (data == "STOEL") {
-                socket.sendToServer(MessageType::STATE, "STOEL");
-            }
+        } else {
+            piBus.send(type, data.c_str());
         } 
 
     }
