@@ -14,7 +14,7 @@ int main() {
     piBus.openSerial("/dev/ttyS0", 9600);
 
     while (true) {
-
+        //BUS NAAR SERVER
         auto [type, data] = piBus.poll();
         if (type == MessageType::RGB) {
             int r = static_cast<int>(data[0]);
@@ -24,9 +24,13 @@ int main() {
             std::string rgbString = std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b);
             socket.sendToServer(MessageType::RGB, rgbString);
         } else if (type != MessageType::UNKNOWN) {
-            piBus.send(type, data.c_str());
+            socket.sendToServer(type, data.c_str());
         } 
 
+        auto [serverType, serverMessage] = socket.pollServer();
+        if (serverType != MessageType::UNKNOWN) {
+            piBus.send(serverType, serverMessage.c_str());
+        }
     }
     return 0;
 }
