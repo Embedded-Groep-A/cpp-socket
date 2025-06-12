@@ -45,6 +45,7 @@ int main() {
                 if (uid == eigenaar.uid) {
                     std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
                     socket.sendToClient("RPIA", MessageType::ACCEPT, eigenaar.eigenaarNaam);
+                    socket.sendToClient("WEMOS", MessageType::OPEN, "");
                     break;
                 }
             }
