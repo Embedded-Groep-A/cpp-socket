@@ -180,10 +180,15 @@ void Socket::sendToServer(MessageType type, const std::string& rawMsg) {
 }
 
 std::pair<MessageType, std::string> Socket::pollServer() {
-    std::cout << "1" << std::endl;
     char buffer[1024];
+    // Set socket to non-blocking mode temporarily
+    int flags = fcntl(socket_fd, F_GETFL, 0);
+    fcntl(socket_fd, F_SETFL, flags | O_NONBLOCK);
+
     ssize_t bytes = recv(socket_fd, buffer, sizeof(buffer), 0);
-    std::cout << "2" << std::endl;
+
+    // Restore socket flags
+    fcntl(socket_fd, F_SETFL, flags);
     if (bytes > 0) {
         std::string message(buffer, bytes);
         
