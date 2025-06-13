@@ -44,13 +44,19 @@ int main() {
             std::cout << "Received UID: " << uid << std::endl;
 
             // Check if the UID matches any owner
+            bool matched = false;
             for (const auto& eigenaar : eigenaars) {
                 if (uid == eigenaar.uid) {
                     std::cout << "UID matched: " << eigenaar.eigenaarNaam << std::endl;
                     socket.sendToClient("RPIA", MessageType::OPEN, "");
                     socket.sendToClient("RPIA", MessageType::ACCEPT, eigenaar.eigenaarNaam);
+                    matched = true;
                     break;
                 }
+            }
+            if (!matched) {
+                std::cout << "UID not recognized: " << uid << std::endl;
+                socket.sendToClient("RPIA", MessageType::REJECT, "");
             }
 
 
