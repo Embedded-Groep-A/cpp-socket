@@ -16,7 +16,6 @@ int main() {
     while (true) {
         //BUS NAAR SERVER
         auto [type, data] = piBus.poll();
-        std::cout << "1" << std::endl;
         if (type == MessageType::RGB) {
             int r = static_cast<int>(data[0]);
             int g = static_cast<int>(data[1]);
@@ -27,12 +26,10 @@ int main() {
         } else if (type != MessageType::UNKNOWN) {
             socket.sendToServer(type, data.c_str());
         } 
-        std::cout << "2" << std::endl;
         auto [serverType, serverMessage] = socket.pollServer();
         if (serverType != MessageType::UNKNOWN) {
             piBus.send(serverType, serverMessage.c_str());
         }
-        std::cout << "3" << std::endl;
 
     }
     return 0;

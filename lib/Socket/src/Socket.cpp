@@ -180,9 +180,10 @@ void Socket::sendToServer(MessageType type, const std::string& rawMsg) {
 }
 
 std::pair<MessageType, std::string> Socket::pollServer() {
+    std::cout << "1" << std::endl;
     char buffer[1024];
     ssize_t bytes = recv(socket_fd, buffer, sizeof(buffer), 0);
-
+    std::cout << "2" << std::endl;
     if (bytes > 0) {
         std::string message(buffer, bytes);
         
