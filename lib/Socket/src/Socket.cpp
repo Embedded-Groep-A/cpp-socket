@@ -150,23 +150,13 @@ void Socket::connect(const std::string& host, int port, const std::string& id) {
     sockaddr_in server_addr;
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(port);
-    if (inet_pton(AF_INET, host.c_str(), &server_addr.sin_addr) <= 0) {
-        std::cerr << "Invalid address/ Address not supported: " << host << std::endl;
-        return;
-    }
+    inet_pton(AF_INET, host.c_str(), &server_addr.sin_addr);
 
-    if (::connect(socket_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
-        std::cerr << "Connection to server failed: " << strerror(errno) << std::endl;
-        return;
-    }
+    ::connect(socket_fd, (struct sockaddr*)&server_addr, sizeof(server_addr));
 
     std::cout << "Connecting to server at " << host << ":" << port << std::endl;
     // Send ID to server
-    ssize_t sent = send(socket_fd, id.c_str(), id.size(), 0);
-    if (sent < 0) {
-        std::cerr << "Failed to send ID to server: " << strerror(errno) << std::endl;
-        return;
-    }
+    send(socket_fd, id.c_str(), id.size(), 0);
     // Wait for ACK
     char buffer[1024];
     int bytes_received = recv(socket_fd, buffer, sizeof(buffer), 0);
@@ -174,13 +164,7 @@ void Socket::connect(const std::string& host, int port, const std::string& id) {
         buffer[bytes_received] = '\0';
         if (strcmp(buffer, "ACK") == 0) {
             std::cout << "Connected to server." << std::endl;
-        } else {
-            std::cerr << "Unexpected response from server: " << buffer << std::endl;
         }
-    } else if (bytes_received == 0) {
-        std::cerr << "Server closed the connection unexpectedly." << std::endl;
-    } else {
-        std::cerr << "Failed to receive ACK from server: " << strerror(errno) << std::endl;
     }
 }
 
