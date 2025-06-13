@@ -81,7 +81,7 @@ std::pair<MessageType, std::string> PiBus::poll() {
         if (endPos != std::string::npos) {
             std::string message = buffer.substr(0, endPos); // Extract the message
             buffer.erase(0, endPos + 1);                   // Remove the processed message
-
+            std::cout << "Received from bus: " << message << std::endl;
             // Parse [TYPE]
             size_t start = message.find('[');
             size_t end = message.find(']');
