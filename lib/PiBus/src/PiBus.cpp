@@ -59,6 +59,8 @@ void PiBus::send(MessageType type, const char* data) {
         message = std::string("#") + data + "\r";
     } else if (type == MessageType::BEL) {
         message = std::string("@") + data + "\r";
+    } else if (type == MessageType::OPEN) {
+        message = "\r[" + typeToString(type) + "] " + data;;
     } else {
         message = "[" + typeToString(type) + "] " + data;;
     }
